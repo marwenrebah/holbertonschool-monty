@@ -5,10 +5,11 @@
 */
 void free_stack(stack_t *stack)
 {
-stack_t *tmp = stack;
-while (tmp)
-{
-free(tmp);
-tmp = tmp->next;
-}
+	stack_t *tmp = stack;
+
+	while (tmp)
+	{
+		free(tmp);
+		tmp = tmp->next;
+	}
 }
