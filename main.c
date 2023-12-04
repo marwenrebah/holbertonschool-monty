@@ -1,20 +1,19 @@
 #include "monty.h"
 /**
- * main - entry point
- * Description: monty program
- * @argc:argument count
- * @argv:argument vector
- * Return: 0
+* main - monty code interpreter
+* @argc: number of arguments
+* @argv: monty file location
+* Return: 0 on success
 */
-char *value = NULL;
+
 int main(int argc, char *argv[])
 {
+	char *content;
 	FILE *file;
+	size_t size = 0;
+	ssize_t read_line = 1;
 	stack_t *stack = NULL;
-	int r = 0, nline = 1;
-	size_t len;
-	char *opcode;
-	char *line;
+	unsigned int counter = 0;
 
 	if (argc != 2)
 	{
@@ -22,30 +21,25 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 	file = fopen(argv[1], "r");
-	if (file == NULL)
+	bus.file = file;
+	if (!file)
 	{
 		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
 		exit(EXIT_FAILURE);
 	}
-
-	while ((r = getline(&line, &len, file)) != -1)
+	while (read_line > 0)
 	{
-		opcode = strtok(line, " \n\t");
-		if (strcmp(opcode, "push") == 0)
+		content = NULL;
+		read_line = getline(&content, &size, file);
+		bus.content = content;
+		counter++;
+		if (read_line > 0)
 		{
-			value = strtok(NULL, " \n\t");
-			if (is_int(value) == 0)
-			{
-				free_stack(stack);
-				fprintf(stderr, "L%d: usage: push integer\n", nline);
-				exit(EXIT_FAILURE);
-			}
+			execute(content, &stack, counter, file);
 		}
-		execute_opcode(&stack, nline, opcode);
-		nline++;
+		free(content);
 	}
-	free(line);
 	free_stack(stack);
 	fclose(file);
-	return (0);
+return (0);
 }
