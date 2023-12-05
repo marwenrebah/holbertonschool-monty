@@ -6,6 +6,8 @@
  * @argv: vector of arguments
  * Return: 0
 */
+char *arg;
+
 int main(int argc, char **argv)
 {
 	stack_t *stack = NULL;
