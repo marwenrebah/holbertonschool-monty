@@ -8,7 +8,6 @@
 */
 int main(int argc, char **argv)
 {
-char *arg;
 	stack_t *stack = NULL;
 	size_t bufsize = 0;
 	char *file = *(argv + 1), *input_line = NULL;
